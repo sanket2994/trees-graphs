@@ -14,6 +14,8 @@ struct node{
 	int data;			/*data feild of node*/
 	struct node *left;		/*pointer to left child*/
 	struct node *right;		/*pointer to right child*/
+	struct node *parent;		/*pointer to the parent */
+	enum {black, red} color;
 	};
 
 /*Function to insert a node in BST*/
@@ -30,6 +32,21 @@ struct node* insert_node_avl(struct node* ,int);
 *This function internally calls the above function i.e. insert_node
 *After calling this function it balances the tree so that it follows the AVL property.
 *It takes data to be inserted as an argument and a pointer to a root node as an argument.
+*/
+
+/*Function to insert node into redblack tree*/
+struct node* insert_node_rb(struct node *tree, struct node *root, int data);
+/*
+*Takes the pointer to the root of the tree, pointer to the parent and data as an argument
+*Returns the pointer to the tree i.e. pointer to the root of the tree
+*also balances the tree after a new node hash been inserted
+*/
+
+/*Inserts the node into an rb*/
+struct node* insert_rb(struct node *tree, struct node *root, int data);
+/*
+*internally called by the above function to insert a new node into the tree
+*returns a pointer to the base(root) node of the tree
 */
 
 /*Function to search for an entry into the tree*/
@@ -58,13 +75,15 @@ struct node* find_max(struct node*);
 void inorder(struct node*);
 
 /*Used to abalance the tree*/
-struct node* balance_tree(struct node*, int);
+struct node* balance_tree_avl(struct node*, int);
 /*
 *Called internally by insert_node_avl.
 *takes the address of the root node as the argument and then balances the tree if necessary,
 *by performing the single shift or double shift operations as required.
 */
 
+/**/
+void balance_tree_rb(struct node *root, struct node *child);
 /*Calculates the diffrences in the heights of the left sub tree ans right subtree*/
 int calc_diff(struct node*);
 

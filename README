@@ -1,0 +1,64 @@
+This a GithUb repository in which ia have explored various implementations of trees and graphs.
+
+The repository contains implementation of the following:
+	1. Binary Search Tree (BST).
+	2. AVL Tree.
+	3. Red-Black Tree.
+	4. Minimal Spanning Tree:
+		a. By using Prim's Algorithm.
+		b. By using Kruskal's Algorithm.
+	5. Dijktras Algorithm for shortest path from one node to all the other nodes in the graph.
+
+
+The repository is divided into three directories: 
+	1. include: contains all the header files.
+		    The header files list is as follows:
+			a. graph.h : headers used for creating a graph.
+			b. spanning.h: headers required for prims and dijktras algorithm.
+			c. kruskal.h: headers required for kruskals algorithm for minmal spanning tree.
+			d. heap.h: headers required to make min heap for prim and dijktras algorithm.
+			e. trees.h: headers for AVL, BST and Red Black Tree.
+	
+	2. src: contains all the implementations of the functions.
+		The list is as follows:
+			a. dijktras.c : Implementation of dijktra's algorithm.
+			b. kruskal.c : Implementation of kruskal's algorithm.
+			c. prim.c : Implementation of prim's algorithm.
+			d. graph.c : Implementation of insertion in graph.
+			e. insert.c : Implenetation for insertion in AVL, BST and Red Black Tree.
+			d. delete.c : Implementation for deletion in AVL and BST tree.
+			e. searching.c : Implementation for searching in AVL, BST and redBlack Tree.
+			f. heap.c : Implementation of min heap algorithm .
+			g. print.c : implementation for printing of AVL, BST and Red Black Tree.
+
+	3. test: contains all the test files for the library.
+		The files are as follows: 
+			a. avl_app.c : Test program  for AVL Tree .
+			b. bst_app.c : Test program  for BST Tree.
+			c. redBlack_app.c : Test program  for Red Black Tree.
+			d. prim_app.c : Test program  for prim's algorithm for MST.
+			e. dijktras_app.c : Test program  for dijktra's algorithm.
+			f. kruskal_app.c : Test program  for kruskal's algorithm for MST.
+
+	It also consists of a make file which internally invokes the make files present in the src and test directory.
+	The make files creates a build folder where youy can find the executables of the test files after you run the make command.
+
+
+How to use this repository:
+
+	1. clone or download this repository.
+	2. go to the path where this repository is stored.
+	3. Then once you enter the repository simply run the make command
+		$ make
+	4. you will see that a build directory has been generated which contatins all the executable files.
+	5. go to this build folder.
+		$ cd build
+	6. Then simply run which ever application ypu want.
+		e.g.: $ ./avl
+
+	7. if you want to remove all the executables come back to the parent directory and run clean target of make
+		$ make clean
+	8. This will remove the execuatbles and the libtree.a library created 
+
+Hope you like this repository do tell me if there are any bugs.
+

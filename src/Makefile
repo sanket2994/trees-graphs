@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-I../include -c -g
-OBJFILES= delete.o insert.o searching.o print.o dijktras.o prim.o kruskal.o redBlack.o heap.o
+OBJFILES= delete.o insert.o searching.o print.o dijktras.o prim.o kruskal.o heap.o graph.o
 LIBNAME= libtree.a
 
 default: library clean
@@ -29,10 +29,11 @@ prim.o: prim.c
 kruskal.o: kruskal.c
 	$(CC) $(CFLAGS) kruskal.c
 
-redBlack.o: redBlack.c
-	$(CC) $(CFLAGS) redBlack.c
-
 heap.o: heap.c
 	$(CC) $(CFLAGS) heap.c
+
+graph.o: graph.c
+	$(CC) $(CFLAGS) graph.c
+
 clean: 
 	rm -f $(OBJFILES)
