@@ -5,9 +5,10 @@
          return (a>b?a:b);
  }
 	
-
+/*Insert a node in BST tree*/
 struct node* insert_node(struct node* root, int data)
 {
+	/*If the node is empty*/
 	if(root==NULL)
 	{
 		struct node *tempnode=(struct node*)malloc(sizeof(struct node));
@@ -17,10 +18,12 @@ struct node* insert_node(struct node* root, int data)
 		
 		return tempnode;
 	}
+	/*If root data is greater than data go left*/
 	else if(root->data > data)
 	{
 		root->left=insert_node(root->left, data);
 	}
+	/*IF root data is less than data go right*/
 	else if(root->data < data)
 	{	
 		root->right=insert_node(root->right, data);
@@ -28,18 +31,21 @@ struct node* insert_node(struct node* root, int data)
 	return root;
 	
 }
-
+/*Avl insertion*/
 struct node* insert_node_avl(struct node* root, int data)
 {
+	/*Do normal BST insertion*/
 	root=insert_node(root, data);
 	if(root==NULL)
 	{
 		return NULL;
 	}
+	/*Check if tree is balanced after node insertion*/
 	root= balance_tree_avl(root, data);
 	return root;
 }
 
+/*Balnce tree function*/
 struct node* balance_tree_avl(struct node *root, int data)
 {
 	
@@ -48,6 +54,7 @@ struct node* balance_tree_avl(struct node *root, int data)
 		return NULL;
 	}
 	struct node *child, *gchild; 
+	/*Check is diffrence in height of left sub tree and righ tsub tree is less than or equql to 1*/
 	if(calc_diff(root) <= 1)
 	{
 		if(root->data > data)
@@ -59,6 +66,7 @@ struct node* balance_tree_avl(struct node *root, int data)
 			root->right = balance_tree_avl(root->right, data);
 		}
 	}
+	/*If condition violated yhan balance the tree*/
 	else
 	{
 		if(root->data > data)
@@ -77,21 +85,23 @@ struct node* balance_tree_avl(struct node *root, int data)
 			else
 			gchild = child->right;
 		}
-		
+		/*left-left case*/
 		if(gchild == child->left && child == root->left)
 		{	
 			root=right_rotate(root, child);
 		}
+		/*right-right case*/
 		else if(gchild == child->right && child == root->right)
 		{
 			root=left_rotate(root, child);
 		}
+		/*right - left case*/
 		else if(gchild == child->left && child == root->right)
 		{
 			root->right=right_rotate(child, gchild);
 			root=left_rotate(root, root->right);
-
 		}
+		/*left-right case*/
 		else
 		{
 			root->left=left_rotate(child, gchild);
@@ -102,17 +112,18 @@ struct node* balance_tree_avl(struct node *root, int data)
 	return root;
 }
 
-
+/*Insert a node in red Black tree*/
 struct node* insert_rb(struct node *tree, struct node *root, int data)
 {
 	if(root==NULL)
 	{
 		struct node *temp=(struct node*)malloc(sizeof(struct node));
 		temp->data=data;
+		/*If the node inserted is not root than color is red*/
 		if(root!=tree)
-		temp->color=RED;
+			temp->color=RED;
 		else 
-		temp->color=BLACK;
+			temp->color=BLACK;
 		temp->left=temp->right=temp->parent=NULL;
 		return temp;
 	}
@@ -120,13 +131,13 @@ struct node* insert_rb(struct node *tree, struct node *root, int data)
 	{
 		root->left=insert_rb(tree, root->left, data);
 		root->left->parent=root;
-//		balance_tree(tree, root->left);
+
 	}
 	else if(root->data < data)
 	{
 		root->right=insert_rb(tree, root->right, data);
 		root->right->parent=root;
-//		balance_tree(tree,root->right);
+
 	}
 	return root;
 }
@@ -134,6 +145,7 @@ struct node* insert_rb(struct node *tree, struct node *root, int data)
 
 struct node *insert_node_rb(struct node *tree, struct node *root, int data)
 {
+	/*Normal BST insertiom*/
 	tree=insert_rb(tree, tree, data);
 	root=search(tree, data);
 	
@@ -142,35 +154,36 @@ struct node *insert_node_rb(struct node *tree, struct node *root, int data)
 	root=tree;
 
 
-/*
-void balance_tree( struct node *root, struct node *child)
-{*/
-	
-	struct node *p=NULL, *gp=NULL, *u=NULL;
+	/*Balancing the tree if any violations*/	
+	struct node *p=NULL, *gp=NULL, *u=NULL; 	/*p = parent node gp=grandparent u=uncle*/
 	while(child!=root && child->parent->color==RED)
 	{
 	
 		p=child->parent;
 		gp=p->parent;
+		/*Assign uncle node*/
 		if(gp->left==p && gp->right!=NULL)
 			u=gp->right;
 		else if(gp->right==p && gp->left!=NULL)	
 			u=gp->left;
 		else 
 			u=NULL;
+		/*If uncle is red assign uncle and parent as Black and grandparent as red and keep going up the tree to balance the tree*/
 		if(u!=NULL && u->color==RED)
 		{
 			p->color=u->color=BLACK;
 			gp->color=RED;
 			child=gp;
 		}
+		/*If uncle is black and parent is red than balance the tree*/
 		else 
 		{
+			/*left - left case*/
 			if(p==gp->left && child==p->left)
 			{
 				gp->left=p->right;
 				p->right=gp;
-				
+				/*interchange color*/
 				int color;
 				color=p->color;
 				p->color=gp->color;
@@ -186,6 +199,7 @@ void balance_tree( struct node *root, struct node *child)
 					root=child;
 				}
 			}
+			/*right - right case*/
 			else if(p==gp->right && child==p->right)
 			{
 				gp->right=p->left;
@@ -204,7 +218,7 @@ void balance_tree( struct node *root, struct node *child)
 				if(gp==root)
 					root=child;
 			}
-			
+			/*right-left case*/
 			else if(p==gp->right && child==p->left)
 			{
 				p->left=child->right;		
@@ -221,12 +235,11 @@ void balance_tree( struct node *root, struct node *child)
 				child->parent=gp->parent;
 				gp->parent=child;
 				
-			//child=child->parent;
 				if(gp==root)
 					root=child;
 	
 			}				
-				
+			/*left-right case*/	
 			else
 			{
 				p->right=child->left;
@@ -243,7 +256,6 @@ void balance_tree( struct node *root, struct node *child)
 				child->parent=gp->parent;
 				gp->parent=child;
 				
-			//	child=child->parent;
 				if(gp==root)
 					root=child;
 			}
@@ -253,6 +265,9 @@ void balance_tree( struct node *root, struct node *child)
 	root->color=BLACK;
 	return root;
 }			
+
+
+/*Calculate the diffrence between left sub tree and right sub tree*/
 int calc_diff(struct node *root)
 {
 	if(root==NULL)
@@ -262,6 +277,7 @@ int calc_diff(struct node *root)
 	return abs(hleft - hright);
 }
 
+/*Calculate the height of the node*/
 int calc_height(struct node *root)
 {
 	if(root==NULL)
@@ -272,6 +288,7 @@ int calc_height(struct node *root)
 	return (max(lheight, rheight)+1);
 }
 
+/*Function for left rotation*/
 struct node* left_rotate(struct node *root, struct node *child)
 {
 	root->right=child->left;
@@ -279,6 +296,7 @@ struct node* left_rotate(struct node *root, struct node *child)
 	return child;
 }
 
+/*function for right rotation*/
 struct node* right_rotate(struct node *root, struct node *child)
 {
 	root->left=child->right;

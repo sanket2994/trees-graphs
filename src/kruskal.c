@@ -1,5 +1,6 @@
 #include"kruskal.h"
 int links=0;
+/*Create a graph */
 struct graph* create_graph(struct graph *graph, int n)
 {
 	int i;
@@ -12,11 +13,13 @@ struct graph* create_graph(struct graph *graph, int n)
 	return temp;
 }
 
+/*Insert link between teo nodes of a graph*/
 void insert_graph(struct graph *graph, int n1, int n2, int weight)
 {
 	struct graph *temp;
 	
 	temp=graph[n1].link;
+	/*check i flink already present*/
 	while(temp!=NULL)
 	{
 		if(temp->node_no==n2 && temp->weight==weight)
@@ -58,12 +61,13 @@ void insert_graph(struct graph *graph, int n1, int n2, int weight)
 	links++;
 }
 
-
+/*Apply kruskals algorithm for MST*/
 void kruskal(struct graph *graph, int n)
 {
 	int i, j=0;
 	struct span *arr = (struct span *)malloc(sizeof(struct span)*links);
 	struct graph *node;
+	/*Insert all the links with their weights in an array*/
 	for(i=0; i<n; i++)
 	{
 		node=graph[i].link;
@@ -79,11 +83,13 @@ void kruskal(struct graph *graph, int n)
 		node=node->link;
 		}
 	}
-
+	/*Sort this array is ascending order of weights */
 	sort_array(arr, links);
+	/*Make the spanning tree using this array*/
 	make_tree(arr, n);
 }
 
+/*Make minimal spanning tree using the array*/
 void make_tree(struct span *arr, int n)
 {
 	int i;
@@ -100,38 +106,29 @@ void make_tree(struct span *arr, int n)
 		node->node_no=arr[i].dst;
 		node2->node_no=arr[i].src;
 		node->weight=node2->weight=arr[i].weight;
-	/*	if(graph[src].link==NULL)
+		/*Check if loop is occurs while insering edges in the MST*/
+		int ret=check_loop(graph, arr[i]);
+		/*If no loop in the MST tahn insert this link*/
+		if(ret==0)
 		{
+			node->link=graph[arr[i].src].link;
 			graph[arr[i].src].link=node;
-	//		graph[dst].link=node2;
-		}*/
-	/*	else
-		{*/
-			int ret=check_loop(graph, arr[i]);
-			if(ret==0)
-			{
-				node->link=graph[arr[i].src].link;
-				graph[arr[i].src].link=node;
-				node2->link=graph[arr[i].dst].link;
-				graph[arr[i].dst].link=node2;
-			}
-	/*	}
-		
-		if(graph[src].link==NULL)
-		{
-			graph[dst].link=node2;
+			node2->link=graph[arr[i].dst].link;
+			graph[arr[i].dst].link=node2;
 		}
-	*/	
+	
 	}
+	/*Print the MST*/
 	print_tree(graph, n);
 }
 
+/*Check if loop is present*/
 int check_loop(struct graph *graph, struct span arr)
 {
 	struct graph *next, *check;
 	next=graph[arr.src].link;
 	int dest=arr.dst;
-	int temp;//=next->node_no;
+	int temp;
 	int src=arr.src;
 	int flag=0;
 	while(next!=NULL)
@@ -158,7 +155,7 @@ int check_loop(struct graph *graph, struct span arr)
 		
 	
 	
-
+/*Sort the array in ascending order of weights*/
 void sort_array(struct span *arr, int n)
 {
 	int i, j;
@@ -185,6 +182,7 @@ void sort_array(struct span *arr, int n)
 	}
 }
 
+/*Print the minimal spanning tree*/
 void print_tree(struct graph *graph, int n)
 {
 	int i;
@@ -204,20 +202,3 @@ void print_tree(struct graph *graph, int n)
 
 
 
-
-
-	
-		
-
-
-
-
-
-
-
-
-
-
-
-
-		

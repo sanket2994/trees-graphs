@@ -16,7 +16,7 @@ void insert_link(struct graph *nodelist , struct graph *graph, int n1, int n2, i
         /*Check if path already exist*/
         if(temp!=NULL)
         {   
-                if(temp->data==node1->data && temp->weight == node1->data && temp->dest == node1->dest)
+                if(temp->data==node1->data && temp->weight == node1->weight && temp->dest == node1->dest)
                 {   
                         memset(node1, 0, sizeof(struct node));
                         free(node1);
