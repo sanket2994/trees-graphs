@@ -34,14 +34,25 @@ struct node* insert_node(struct node* root, int data)
 /*Avl insertion*/
 struct node* insert_node_avl(struct node* root, int data)
 {
-	/*Do normal BST insertion*/
-	root=insert_node(root, data);
 	if(root==NULL)
 	{
-		return NULL;
+		struct node *tempnode = (struct node*)malloc(sizeof(struct node));
+		tempnode->data=data;
+		tempnode->left=NULL;
+		tempnode->right=NULL;
+		return tempnode;
+	}	
+	
+	else if(root->data < data)
+	{
+		root->right=insert_node_avl(root->right, data);
+		root=balance_tree_avl(root,data);
 	}
-	/*Check if tree is balanced after node insertion*/
-	root= balance_tree_avl(root, data);
+	else if(root->data > data)
+	{
+		root->left=insert_node_avl(root->left, data);
+		root=balance_tree_avl(root, data);
+	}
 	return root;
 }
 
@@ -55,19 +66,7 @@ struct node* balance_tree_avl(struct node *root, int data)
 	}
 	struct node *child, *gchild; 
 	/*Check is diffrence in height of left sub tree and righ tsub tree is less than or equql to 1*/
-	if(calc_diff(root) <= 1)
-	{
-		if(root->data > data)
-		{
-			root->left = balance_tree_avl(root->left, data);
-		}
-		else if(root->data < data)
-		{
-			root->right = balance_tree_avl(root->right, data);
-		}
-	}
-	/*If condition violated yhan balance the tree*/
-	else
+	if(calc_diff(root) > 1)
 	{
 		if(root->data > data)
 		{
@@ -111,6 +110,9 @@ struct node* balance_tree_avl(struct node *root, int data)
 	}
 	return root;
 }
+
+
+
 
 /*Insert a node in red Black tree*/
 struct node* insert_rb(struct node *tree, struct node *root, int data)
